@@ -8,6 +8,8 @@ package exaxmen2p2_gabrielgiron_12051024;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -192,6 +194,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     private void PublicosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PublicosItemStateChanged
         // TODO add your handling code here:
+        ChangeTreeContent();
+    }//GEN-LAST:event_PublicosItemStateChanged
+
+    private void ChangeTreeContent()
+    {
         if(Publicos.isSelected())
         {
             DefaultTreeModel ModeloArbol = (DefaultTreeModel) Arbol.getModel();
@@ -216,11 +223,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
             ModeloArbol.reload();
         }
-    }//GEN-LAST:event_PublicosItemStateChanged
-
+    }
+    
     private void CientificosBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CientificosBoxItemStateChanged
         // TODO add your handling code here:
-        
+        ChangeTreeContent();
     }//GEN-LAST:event_CientificosBoxItemStateChanged
 
     private void AddCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCActionPerformed
@@ -232,11 +239,14 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         C.getListaCientificos().add(c);
         C.escribirArchivo();
         UpdateCBox();
+        JOptionPane.showMessageDialog(null, "Cientifico Agregado Exitosamente");
+        NameField.setText("");
     }//GEN-LAST:event_AddCActionPerformed
 
     private void ColisionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColisionesActionPerformed
         // TODO add your handling code here:
         Random R = new Random();
+        Cientificos C = (Cientificos) CientificosBox.getSelectedItem();
         int Probabilidad = 1+R.nextInt(100);
         int xtotal = Planeta2.getX() - Planeta1.getX();
         int ytotal = Planeta2.getY() - Planeta1.getY();
@@ -244,6 +254,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         double y = Math.pow(ytotal, 2);
         double total = x + y;
         double Distancia = Math.sqrt(total);
+        hilo.start();
         if(Planeta1 instanceof Terrestre)
         {
             if(Probabilidad <= 25)
@@ -255,6 +266,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 int X = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia X del planeta"));
                 int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
                 Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
+                C.getDescubiertos().add(P);
             }
         }
         else if(Planeta2 instanceof Gaseosos)
@@ -268,6 +280,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 int X = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia X del planeta"));
                 int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
                 Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
+                C.getDescubiertos().add(P);
             }
         }
         System.out.println("Distancia: " + Distancia);
@@ -307,7 +320,6 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     private void CientificosBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CientificosBoxActionPerformed
         // TODO add your handling code here:
-        UpdateCBox();
     }//GEN-LAST:event_CientificosBoxActionPerformed
 
     private void UpdateCBox()
@@ -412,8 +424,20 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private Planetas Planeta1;
     private Planetas Planeta2;
     private int Max;
+    Thread hilo = new Thread(this);
+    
     @Override
     public void run() {
-        
+        Barra.setMaximum(Max);
+        int A = 50;
+        try {
+            while(A < Max)
+            {
+                Barra.setValue(A);
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
