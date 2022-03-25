@@ -7,7 +7,9 @@ package exaxmen2p2_gabrielgiron_12051024;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -15,7 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author Galex
  */
-public class Principal extends javax.swing.JFrame {
+public class Principal extends javax.swing.JFrame implements Runnable{
 
     /**
      * Creates new form Principal
@@ -35,8 +37,8 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         POPUPMENU = new javax.swing.JPopupMenu();
-        Planeta1 = new javax.swing.JMenuItem();
-        Planeta2 = new javax.swing.JMenuItem();
+        Planeta1Menu = new javax.swing.JMenuItem();
+        Planeta2Menu = new javax.swing.JMenuItem();
         Barra = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         Arbol = new javax.swing.JTree();
@@ -50,16 +52,21 @@ public class Principal extends javax.swing.JFrame {
         Publicos = new javax.swing.JCheckBox();
         AddC = new javax.swing.JButton();
 
-        Planeta1.setText("Planeta 1");
-        Planeta1.addActionListener(new java.awt.event.ActionListener() {
+        Planeta1Menu.setText("Planeta 1");
+        Planeta1Menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Planeta1ActionPerformed(evt);
+                Planeta1MenuActionPerformed(evt);
             }
         });
-        POPUPMENU.add(Planeta1);
+        POPUPMENU.add(Planeta1Menu);
 
-        Planeta2.setText("Planeta 2");
-        POPUPMENU.add(Planeta2);
+        Planeta2Menu.setText("Planeta 2");
+        Planeta2Menu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Planeta2MenuActionPerformed(evt);
+            }
+        });
+        POPUPMENU.add(Planeta2Menu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +95,11 @@ public class Principal extends javax.swing.JFrame {
         CientificosBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 CientificosBoxItemStateChanged(evt);
+            }
+        });
+        CientificosBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CientificosBoxActionPerformed(evt);
             }
         });
 
@@ -224,14 +236,51 @@ public class Principal extends javax.swing.JFrame {
 
     private void ColisionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColisionesActionPerformed
         // TODO add your handling code here:
-        
+        Random R = new Random();
+        int Probabilidad = 1+R.nextInt(100);
+        int xtotal = Planeta2.getX() - Planeta1.getX();
+        int ytotal = Planeta2.getY() - Planeta1.getY();
+        double x = Math.pow(xtotal, 2);
+        double y = Math.pow(ytotal, 2);
+        double total = x + y;
+        double Distancia = Math.sqrt(total);
+        if(Planeta1 instanceof Terrestre)
+        {
+            if(Probabilidad <= 25)
+            {
+                JOptionPane.showMessageDialog(null, "Se Ha Creado un nuevo planeta por la colision");
+                String Name = JOptionPane.showInputDialog("Ingrese el Nombre");
+                int Tamaño = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Tamaño del Planeta"));
+                int Peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Peso del Planeta"));
+                int X = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia X del planeta"));
+                int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
+                Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
+            }
+        }
+        else if(Planeta2 instanceof Gaseosos)
+        {
+            if(Probabilidad <= 20)
+            {
+                JOptionPane.showMessageDialog(null, "Se Ha Creado un nuevo planeta por la colision");
+                String Name = JOptionPane.showInputDialog("Ingrese el Nombre");
+                int Tamaño = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Tamaño del Planeta"));
+                int Peso = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Peso del Planeta"));
+                int X = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia X del planeta"));
+                int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
+                Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
+            }
+        }
+        System.out.println("Distancia: " + Distancia);
+        Max = (int)Distancia;
+        System.out.println(Max);
     }//GEN-LAST:event_ColisionesActionPerformed
 
-    private void Planeta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Planeta1ActionPerformed
+    private void Planeta1MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Planeta1MenuActionPerformed
         // TODO add your handling code here:
         Planetas P = (Planetas) NodoSeleccionado.getUserObject();
-        System.out.print(P.toString());
-    }//GEN-LAST:event_Planeta1ActionPerformed
+        Planeta1Field.setText(P.toString());
+        Planeta1 = P;
+    }//GEN-LAST:event_Planeta1MenuActionPerformed
 
     private void ArbolMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ArbolMousePressed
         // TODO add your handling code here:
@@ -248,6 +297,18 @@ public class Principal extends javax.swing.JFrame {
             PopUp(evt);
         }
     }//GEN-LAST:event_ArbolMouseReleased
+
+    private void Planeta2MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Planeta2MenuActionPerformed
+        // TODO add your handling code here:
+        Planetas P = (Planetas) NodoSeleccionado.getUserObject();
+        Planeta2Field.setText(P.toString());
+        Planeta2 = P;
+    }//GEN-LAST:event_Planeta2MenuActionPerformed
+
+    private void CientificosBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CientificosBoxActionPerformed
+        // TODO add your handling code here:
+        UpdateCBox();
+    }//GEN-LAST:event_CientificosBoxActionPerformed
 
     private void UpdateCBox()
     {
@@ -336,10 +397,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton Colisiones;
     private javax.swing.JTextField NameField;
     private javax.swing.JPopupMenu POPUPMENU;
-    private javax.swing.JMenuItem Planeta1;
     private javax.swing.JTextField Planeta1Field;
-    private javax.swing.JMenuItem Planeta2;
+    private javax.swing.JMenuItem Planeta1Menu;
     private javax.swing.JTextField Planeta2Field;
+    private javax.swing.JMenuItem Planeta2Menu;
     private javax.swing.JCheckBox Publicos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -348,4 +409,11 @@ public class Principal extends javax.swing.JFrame {
     private ArrayList<Planetas> PlanetasPublicos = new ArrayList();
     private DefaultMutableTreeNode NodoSeleccionado;
     private Planetas PlanetaSeleccionado;
+    private Planetas Planeta1;
+    private Planetas Planeta2;
+    private int Max;
+    @Override
+    public void run() {
+        
+    }
 }
