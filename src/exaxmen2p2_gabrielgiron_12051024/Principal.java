@@ -21,6 +21,7 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        UpdateCBox();
     }
 
     /**
@@ -43,7 +44,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         NameField = new javax.swing.JTextField();
         Publicos = new javax.swing.JCheckBox();
-        jButton2 = new javax.swing.JButton();
+        AddC = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +72,12 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Agregar Cientifico");
+        AddC.setText("Agregar Cientifico");
+        AddC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddCActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,7 +99,7 @@ public class Principal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                                    .addComponent(AddC, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -134,7 +140,7 @@ public class Principal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(NameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(AddC)))
                 .addGap(18, 18, 18)
                 .addComponent(Publicos)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -176,6 +182,17 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_CientificosBoxItemStateChanged
+
+    private void AddCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCActionPerformed
+        // TODO add your handling code here:
+        String Name = NameField.getText();
+        AdminCientificos C = new AdminCientificos("./Cientificos");
+        C.cargarArchivo();
+        Cientificos c = new Cientificos(Name);
+        C.getListaCientificos().add(c);
+        C.escribirArchivo();
+        UpdateCBox();
+    }//GEN-LAST:event_AddCActionPerformed
 
     private void UpdateCBox()
     {
@@ -246,6 +263,7 @@ public class Principal extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddC;
     private javax.swing.JTree Arbol;
     private javax.swing.JProgressBar Barra;
     private javax.swing.JComboBox<String> CientificosBox;
@@ -254,7 +272,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField Planeta2;
     private javax.swing.JCheckBox Publicos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
