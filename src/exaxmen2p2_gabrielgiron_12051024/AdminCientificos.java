@@ -80,6 +80,9 @@ public class AdminCientificos {
             bw = new ObjectOutputStream(fw);
             for (Cientificos t : listaCientificos) {
                 bw.writeObject(t);
+                for (int i = 0; i < t.getDescubiertos().size(); i++) {
+                    bw.writeObject(t.getDescubiertos().get(i));
+                }
             }
             bw.flush();
         } catch (Exception ex) {

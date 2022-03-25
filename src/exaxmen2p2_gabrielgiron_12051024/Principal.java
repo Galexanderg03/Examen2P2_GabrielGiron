@@ -19,7 +19,7 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author Galex
  */
-public class Principal extends javax.swing.JFrame implements Runnable{
+public class Principal extends javax.swing.JFrame{
 
     /**
      * Creates new form Principal
@@ -71,6 +71,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         POPUPMENU.add(Planeta2Menu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Barra.setForeground(new java.awt.Color(0, 102, 0));
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Planetas");
         Arbol.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -227,7 +229,14 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     
     private void CientificosBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CientificosBoxItemStateChanged
         // TODO add your handling code here:
-        ChangeTreeContent();
+        if(Publicos.isSelected())
+        {
+            
+        }
+        else
+        {
+            ChangeTreeContent();
+        }
     }//GEN-LAST:event_CientificosBoxItemStateChanged
 
     private void AddCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCActionPerformed
@@ -245,6 +254,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     private void ColisionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColisionesActionPerformed
         // TODO add your handling code here:
+        AdminCientificos AC = new AdminCientificos("./Cientificos");
+        AC.cargarArchivo();
         Random R = new Random();
         Cientificos C = (Cientificos) CientificosBox.getSelectedItem();
         int Probabilidad = 1+R.nextInt(100);
@@ -254,7 +265,15 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         double y = Math.pow(ytotal, 2);
         double total = x + y;
         double Distancia = Math.sqrt(total);
-        hilo.start();
+        System.out.println("Distancia: " + Distancia);
+        Max = (int)Distancia;
+        int A = 50;
+        Barra.setMaximum(A);
+        while(A < Max)
+        {
+            Barra.setValue(A);
+            A = A + 50;
+        }
         if(Planeta1 instanceof Terrestre)
         {
             if(Probabilidad <= 25)
@@ -267,6 +286,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
                 Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
                 C.getDescubiertos().add(P);
+                AC.escribirArchivo();
             }
         }
         else if(Planeta2 instanceof Gaseosos)
@@ -281,11 +301,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 int Y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la distancia Y del planeta"));
                 Planetas P = new Terrestre(Tamaño, Peso, Name, X, Y);
                 C.getDescubiertos().add(P);
+                AC.escribirArchivo();
             }
         }
-        System.out.println("Distancia: " + Distancia);
-        Max = (int)Distancia;
-        System.out.println(Max);
     }//GEN-LAST:event_ColisionesActionPerformed
 
     private void Planeta1MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Planeta1MenuActionPerformed
@@ -424,20 +442,5 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private Planetas Planeta1;
     private Planetas Planeta2;
     private int Max;
-    Thread hilo = new Thread(this);
     
-    @Override
-    public void run() {
-        Barra.setMaximum(Max);
-        int A = 50;
-        try {
-            while(A < Max)
-            {
-                Barra.setValue(A);
-                Thread.sleep(500);
-            }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }
